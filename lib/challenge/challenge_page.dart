@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 
 class ChallengePage extends StatefulWidget {
   final List<QuestionModel> questions;
+  final String title;
   ChallengePage({
     Key? key,
     required this.questions,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,14 @@ class _ChallengePageState extends State<ChallengePage> {
     if (controller.currentPage < widget.questions.length)
       pageController.nextPage(
           duration: Duration(milliseconds: 600), curve: Curves.elasticInOut);
+  }
+
+  void onSelected(bool value) {
+    if (value) {
+      controller.qtdAnwserRight++;
+    }
+
+    nextPage();
   }
 
   Widget build(BuildContext context) {
@@ -62,7 +72,10 @@ class _ChallengePageState extends State<ChallengePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: widget.questions
-            .map((e) => QuizWidget(question: e, onChange: nextPage))
+            .map((e) => QuizWidget(
+                  question: e,
+                  onSelected: onSelected,
+                ))
             .toList(),
       ),
       bottomNavigationBar: SafeArea(
@@ -85,10 +98,14 @@ class _ChallengePageState extends State<ChallengePage> {
                             child: NextButtonWidget.green(
                           label: "Confirmar",
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ResultPage()));
+                                    builder: (context) => ResultPage(
+                                          title: widget.title,
+                                          result: controller.qtdAnwserRight,
+                                          length: widget.questions.length,
+                                        )));
                           },
                         )),
                     ],
