@@ -59,7 +59,8 @@ class ResultPage extends StatelessWidget {
                           child: NextButtonWidget.purple(
                             label: "Compartilhar",
                             onTap: () {
-                              Share.share('Caxias');
+                              Share.share(
+                                  'DevQuiz da NLW 5 Flutter: Eu consegui nno Item \n$title ${result / length} ');
                             },
                           ),
                         ),
